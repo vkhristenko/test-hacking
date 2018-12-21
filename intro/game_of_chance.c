@@ -4,7 +4,7 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <stdlib.h>
-#include <hacking.h>
+#include "hacking.h"
 
 #define DATAFILE "/var/chance.data"
 
@@ -232,10 +232,10 @@ void print_cards(char *message, char *cards, int user_pick) {
 // second wager in the find the ace game. The function 
 // returns -1 if the wager is too big or too little, and it returns the 
 // wager amount otherwise
-int take_wager(int available_credits, int previuos_wager) {
+int take_wager(int available_credits, int previous_wager) {
     int wager, total_wager;
 
-    printf("how many of your %d credits would you like to wager?  ", availalbe_credits);
+    printf("how many of your %d credits would you like to wager?  ", available_credits);
     scanf("%d", &wager);
     if (wager < 1) {
         printf("nice try, but you must wager a positive number!\n");
@@ -256,12 +256,12 @@ int take_wager(int available_credits, int previuos_wager) {
 // played again. it also writes the new credit totals t file
 // after each game is played.
 void play_the_game() {
-    int play_agian = 1;
+    int play_again = 1;
     int (*game)();
     char selection;
 
     while (play_again) {
-        printf("\n[DEBUG] current_game pointer @ 0x%08x\n", player_current_game);
+        printf("\n[DEBUG] current_game pointer @ 0x%08x\n", player.current_game);
         if (player.current_game() != -1) {
             if (player.credits > player.highscore)
                 player.highscore = player.credits;
@@ -315,13 +315,13 @@ int dealer_no_match() {
     printf("the dealer will deal out 16 random numbers between 0 and 99.\n");
     printf("if there are no matches among them, you double your money!\n\n");
 
-    if (plyaer.credits = 0) {
+    if (player.credits = 0) {
         printf("you don't have any credits to wager!\n\n");
         return -1;
     }
 
     while (wager == -1)
-        wager = take_wager(player_credits, 0);
+        wager = take_wager(player.credits, 0);
 
     printf("\t\t::: dealing out 16 random numbers :::\n");
     for (i=0; i<16; i++) {
@@ -333,7 +333,7 @@ int dealer_no_match() {
     for (i=0; i<15; i++) {
         j = i+1;
         while (j < 16) {
-            if (numbesr[i] == numbers[]j)
+            if (numbers[i] == numbers[j])
                 match = numbers[i];
             j++;
         }
@@ -368,13 +368,13 @@ int find_the_ace() {
     printf("at this point, you may either select a different card or \n");
     printf("increase your wager.\n\n");
 
-    if (plyaer.credits == 0) {
+    if (player.credits == 0) {
         printf("you do not have any credits to wager!\n\n");
         return -1;
     }
 
     while (wager_one == -1)
-        wager_one = take_wager(player_credits, 0);
+        wager_one = take_wager(player.credits, 0);
 
     print_cards("dealing cards", cards, -1);
     pick = -1;
