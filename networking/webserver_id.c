@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     unsigned char buffer[4096];
 
     if (argc < 2) {
-        printf("usage: %s <hostname>\n", argv[]);
+        printf("usage: %s <hostname>\n", argv[0]);
         exit(1);
     }
 

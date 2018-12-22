@@ -10,7 +10,7 @@
 #include "../common/hacking.h"
 #include "../common/hacking-network.h"
 
-#define PORT 80 // the port users will be connecting to
+#define PORT 7890 // the port users will be connecting to
 #define WEBROOT "./webroot" // the webservers's root directory
 
 void handle_connection(int, struct sockaddr_in *); // handle web requests
@@ -31,7 +31,7 @@ int main(void) {
 
     host_addr.sin_family = AF_INET;
     host_addr.sin_port = htons(PORT);
-    host_add.sin_addr.s_addr = INADDR_ANY; // auto fill my ip
+    host_addr.sin_addr.s_addr = INADDR_ANY; // auto fill my ip
     memset(&(host_addr.sin_zero), '\0', 8);
 
     if (bind(sockfd, (struct sockaddr *)&host_addr, sizeof(struct sockaddr)) == -1)
@@ -86,7 +86,7 @@ void handle_connection(int sockfd, struct sockaddr_in *client_addr_ptr) {
                 strcat(ptr, "index.html"); // add 'index.html' to the end.
             strcpy(resource, WEBROOT); // begin resource with web root path
             strcat(resource, ptr); // and join it with resource path
-            fd = open(resource, 0_RDONLY, 0); // try opening the file
+            fd = open(resource, O_RDONLY, 0); // try opening the file
             printf("\tOpening \'%s\'\t", resource);
             if (fd == -1) { // if file is not found
                 printf(" 404 Not Found\n");
