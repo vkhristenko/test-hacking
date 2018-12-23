@@ -75,5 +75,46 @@ void decode_ethernet(u_char const *header_start) {
 }
 
 void decode_ip(u_char const *header_start) {
+    struct ip_hdr const *ip_header;
 
+    ip_header = (struct ip_hdr const *)header_start;
+    printf("\t(( layer 3 ::: ip header ))\n");
+    printf("\t( source %s\n", inet_ntoa(ip_header->ip_src_addr));
+    printf("dest: %s )\n", inet_ntoa(ip_header->ip_dest_addr));
+    printf("\t( type: %u\t", (u_int) ip_header->ip_type);
+    printf("id: %hu\tlength: %hu )\n", ntohs(ip_header->ip_id), 
+        ntohs(ip_header->ip_len));
+}
+
+u_int decode_tcp(u_char const *header_start) {
+    u_int header_size;
+    struct tcp_hdr const *tcp_header;
+
+    tcp_header = (struct tcp_hdr const *)header_start;
+    header_size = 4 * tcp_header->tcp_offset;
+
+    tcp_header = (struct tcp_hdr const *)header_start;
+    header_size = 4 * tcp_header->tcp_offset;
+
+    printf("\t\t{{ layer 4 :::: tcp header }}\n");
+    printf("\t\t{ src port: %hu\t", ntohs(tcp_header->tcp_src_port));
+    printf("dest port: %hu }\n", ntohs(tcp_header->tcp_dest_port));
+    printf("\t\t{ Seq #: %u\t", ntohl(tcp_header->tcp_seq));
+    printf("Ack #: %u }\n", ntohl(tcp_header->tcp_ack));
+    printf("\t\t{ header size: %u\tFlags: ", header_size);
+    if (tcp_header->tcp_flags & TCP_FIN)
+        printf("FIN ");
+    if (tcp_header->tcp_flags & TCP_SYN)
+        printf("SYN ");
+    if (tcp_header->tcp_flags & TCP_RST)
+        printf("RST ");
+    if (tcp_header->tcp_flags & TCP_PUSH)
+        printf("PUSH ");
+    if (tcp_header->tcp_flags & TCP_ACK)
+        printf("ACK ");
+    if (tcp_header->tcp_flags & TCP_URG)
+        printf("URG ");
+    printf(" }\n");
+
+    return header_size;
 }
