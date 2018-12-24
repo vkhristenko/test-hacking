@@ -19,7 +19,7 @@ int main() {
 
     device = pcap_lookupdev(errbuf);
     if (device == NULL)
-        pcap_fata("pcap_lookupdev", errbuf);
+        pcap_fatal("pcap_lookupdev", errbuf);
 
     printf("sniffing on device %s\n", device);
 
@@ -53,7 +53,7 @@ void caught_packet(u_char *user_args, struct pcap_pkthdr const *cap_header,
         printf("\t\t\tNo Packet Data\n");
 }
 
-void pcap_data(char const *failed_in, char const * errbuf) {
+void pcap_fatal(char const *failed_in, char const * errbuf) {
     printf("Fatal Error in %s: %s\n", failed_in, errbuf);
     exit(1);
 }
